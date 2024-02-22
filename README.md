@@ -37,7 +37,7 @@ Untuk menggunakan proyek ini, ikuti langkah-langkah berikut:
    Build aplikasi untuk produksi dengan perintah:
 
    ```bash
-   npm install
+   npm run build
    ```
 
 4. **Menjalankan Aplikasi**
