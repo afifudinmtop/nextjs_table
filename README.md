@@ -26,28 +26,35 @@ Untuk menggunakan proyek ini, ikuti langkah-langkah berikut:
    git clone https://github.com/afifudinmtop/nextjs_table.git
    ```
 
-2. **Instalasi Dependensi**
-   Masuk ke direktori proyek yang telah di-clone dan jalankan perintah berikut untuk menginstal semua dependensi yang diperlukan:
+2. **Masuk Ke Folder**
+   Masuk ke direktori proyek yang telah di-clone
+
+   ```bash
+   cd ./nextjs_table/my-app/
+   ```
+
+3. **Instalasi Dependensi**
+   Jalankan perintah berikut untuk menginstal semua dependensi yang diperlukan:
 
    ```bash
    npm install
    ```
 
-3. **Build Aplikasi**
+4. **Build Aplikasi**
    Build aplikasi untuk produksi dengan perintah:
 
    ```bash
    npm run build
    ```
 
-4. **Menjalankan Aplikasi**
+5. **Menjalankan Aplikasi**
    Setelah build selesai, jalankan aplikasi dengan:
 
    ```bash
    npm start
    ```
 
-5. **Akses Aplikasi**
+6. **Akses Aplikasi**
    Buka browser dan akses http://localhost:3000 untuk melihat aplikasi berjalan. Anda akan melihat tabel yang sudah dilengkapi dengan data dummy yang siap untuk diinteraksi.
 
 ## Kontribusi
