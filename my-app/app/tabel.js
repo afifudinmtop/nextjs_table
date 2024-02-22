@@ -76,10 +76,11 @@ const Tabel = ({ data, columns, id }) => {
   };
 
   return (
-    <div className="w-[90%] mx-auto p-5 rounded bg-white">
-      <div className="mb-4 flex justify-between">
+    <div className="max-w-[90vw] mx-auto p-5 rounded bg-white overflow-auto">
+      {/* controller top */}
+      <div className="mb-4 flex justify-between gap-[20px] flex-wrap">
         {/* control */}
-        <div>
+        <div className="flex justify-center flex-wrap gap-[10px]">
           {/* Excel */}
           <button
             onClick={handleExportExcel}
@@ -164,7 +165,9 @@ const Tabel = ({ data, columns, id }) => {
         </tbody>
       </table>
 
-      <div className="mt-4 pagination flex justify-between">
+      {/* controller bottom */}
+      <div className="mt-4 pagination flex justify-center lg:justify-between flex-wrap gap-[10px]">
+        {/* view per page */}
         <div className="flex my-auto">
           <div className="relative w-20">
             <svg
@@ -200,6 +203,7 @@ const Tabel = ({ data, columns, id }) => {
           <div className="my-auto ms-2">entries per page</div>
         </div>
 
+        {/* pagination */}
         <div>
           {/* << */}
           <button
