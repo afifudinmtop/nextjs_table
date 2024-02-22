@@ -9,7 +9,7 @@ import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
-const Tabel = ({ data, columns, id, addRow }) => {
+const Tabel = ({ data, columns, id }) => {
   const [searchInput, setSearchInput] = useState("");
 
   const {
@@ -76,38 +76,53 @@ const Tabel = ({ data, columns, id, addRow }) => {
   };
 
   return (
-    <div className="container mx-auto px-4">
-      <div className="mb-4">
-        <input
-          value={searchInput}
-          onChange={handleSearchChange}
-          placeholder="Search..."
-          className="mb-2 px-4 py-2 border rounded"
-        />
-        <button
-          onClick={addRow}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Add Row
-        </button>
-        <button
-          onClick={handleExportExcel}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-2 rounded"
-        >
-          Export to Excel
-        </button>
-        <button
-          onClick={handleExportPDF}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-2 rounded"
-        >
-          Export to PDF
-        </button>
-        <button
-          onClick={handleCopy}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-2 rounded"
-        >
-          Copy
-        </button>
+    <div className="w-[90%] mx-auto p-5 rounded bg-white">
+      <div className="mb-4 flex justify-between">
+        {/* control */}
+        <div>
+          {/* Excel */}
+          <button
+            onClick={handleExportExcel}
+            className="bg-green-800 hover:bg-green-900 text-white font-bold py-2 px-4 ml-2 rounded"
+          >
+            <div className="flex">
+              <img src="/excel.png" className="w-[25px] h-[25px]" />
+              <span className="my-auto ms-3">Excel</span>
+            </div>
+          </button>
+
+          {/* PDF */}
+          <button
+            onClick={handleExportPDF}
+            className="bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 ml-2 rounded"
+          >
+            <div className="flex">
+              <img src="/pdf.png" className="w-[25px] h-[25px]" />
+              <span className="my-auto ms-3">PDF</span>
+            </div>
+          </button>
+
+          {/* Copy */}
+          <button
+            onClick={handleCopy}
+            className="bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 ml-2 rounded"
+          >
+            <div className="flex">
+              <img src="/copy.png" className="w-[25px] h-[25px]" />
+              <span className="my-auto ms-3">Copy</span>
+            </div>
+          </button>
+        </div>
+
+        {/* Search */}
+        <div className="flex">
+          <div className="my-auto me-2">Search:</div>
+          <input
+            value={searchInput}
+            onChange={handleSearchChange}
+            className="px-4 py-2 border border-black rounded my-auto"
+          />
+        </div>
       </div>
 
       <table {...getTableProps()} className="table-auto w-full" id={id}>
@@ -133,10 +148,11 @@ const Tabel = ({ data, columns, id, addRow }) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
+          {page.map((row, index) => {
             prepareRow(row);
+            const rowClass = index % 2 === 0 ? "bg-gray-100" : "";
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps()} className={rowClass}>
                 {row.cells.map((cell) => (
                   <td {...cell.getCellProps()} className="border px-4 py-2">
                     {cell.render("Cell")}
@@ -148,54 +164,87 @@ const Tabel = ({ data, columns, id, addRow }) => {
         </tbody>
       </table>
 
-      <div className="pagination">
-        <button
-          onClick={() => gotoPage(0)}
-          disabled={!canPreviousPage}
-          className="mr-2"
-        >
-          {"<<"}
-        </button>
-        <button
-          onClick={() => previousPage()}
-          disabled={!canPreviousPage}
-          className="mr-2"
-        >
-          {"<"}
-        </button>
-        <button
-          onClick={() => nextPage()}
-          disabled={!canNextPage}
-          className="mr-2"
-        >
-          {">"}
-        </button>
-        <button
-          onClick={() => gotoPage(pageCount - 1)}
-          disabled={!canNextPage}
-          className="mr-2"
-        >
-          {">>"}
-        </button>
-        <span>
-          Page{" "}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{" "}
-        </span>
-        <select
-          value={pageSize}
-          onChange={(e) => {
-            setPageSize(Number(e.target.value));
-          }}
-          className="ml-2"
-        >
-          {[5, 10, 20].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
+      <div className="mt-4 pagination flex justify-between">
+        <div className="flex my-auto">
+          <div className="relative w-20">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="absolute top-0 bottom-0 w-5 h-5 my-auto text-gray-400 right-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+            {/* show */}
+            <select
+              value={pageSize === data.length ? "all" : pageSize}
+              onChange={(e) => {
+                const value = e.target.value;
+                setPageSize(value === "all" ? data.length : Number(value));
+              }}
+              className="w-full px-3 py-2 text-sm text-gray-600 bg-white border rounded-lg shadow-sm outline-none appearance-none focus:ring-offset-2 focus:ring-indigo-600 focus:ring-2"
+            >
+              {[5, 10, 20].map((pageSizeOption) => (
+                <option key={pageSizeOption} value={pageSizeOption}>
+                  {pageSizeOption}
+                </option>
+              ))}
+              <option value="all">Show All</option>
+            </select>
+          </div>
+
+          <div className="my-auto ms-2">entries per page</div>
+        </div>
+
+        <div>
+          {/* << */}
+          <button
+            onClick={() => gotoPage(0)}
+            disabled={!canPreviousPage}
+            className="p-2 rounded cursor-pointer hover:bg-gray-400 hover:text-white"
+          >
+            {"<<"}
+          </button>
+
+          {/* < */}
+          <button
+            onClick={() => previousPage()}
+            disabled={!canPreviousPage}
+            className="py-2 px-3 rounded cursor-pointer hover:bg-gray-400 hover:text-white"
+          >
+            {"<"}
+          </button>
+
+          {/* page of */}
+          <span className="mx-4">
+            Page{" "}
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>
+          </span>
+
+          {/* > */}
+          <button
+            onClick={() => nextPage()}
+            disabled={!canNextPage}
+            className="py-2 px-3 rounded cursor-pointer hover:bg-gray-400 hover:text-white"
+          >
+            {">"}
+          </button>
+
+          {/* >> */}
+          <button
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+            className="p-2 rounded cursor-pointer hover:bg-gray-400 hover:text-white"
+          >
+            {">>"}
+          </button>
+        </div>
       </div>
     </div>
   );
